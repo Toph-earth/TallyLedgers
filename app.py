@@ -93,14 +93,7 @@ st.markdown(f"""
         --legend-text: {DARK_TEXT};
     }}
 
-    /* Root text color fix: Streamlit sets color-scheme: dark on a high-level
-       wrapper when the viewer's theme is dark, which makes the browser cascade
-       its own white (rgb(250,250,250)) down into every descendant that doesn't
-       have its own explicit color — including stTabPanel content, plain text,
-       and anything we haven't individually targeted. Setting color here, at the
-       actual root, fixes the inherited default everywhere in one place instead
-       of chasing it widget-by-widget. More specific rules below (cards, sidebar,
-       metrics) still win since they're more specific selectors. */
+    /* Root text color fix */
     html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stTabPanel"] {{
         color: var(--text) !important;
     }}
@@ -257,22 +250,30 @@ st.markdown(f"""
     }}
     
     .inline-download-btn > button {{
-        background-color: var(--bg-soft) !important;
-        color: var(--text) !important;
+        background-color: var(--metric-bg) !important;
+        color: var(--metric-value) !important;
         border: 1px solid var(--border) !important;
         border-radius: 8px !important;
         box-shadow: none !important;
-        padding: 0.3rem 0.8rem !important;
+        padding: 0.4rem 1rem !important;
         font-size: 0.8rem !important;
         font-weight: 600 !important;
         width: auto !important;
-        min-height: unset !important;
+        min-height: 38px !important;
         letter-spacing: 0.05em;
+        font-family: 'IBM Plex Mono', monospace !important;
+        transition: all 0.3s ease !important;
     }}
     
     .inline-download-btn > button:hover {{
-        border-color: {TEAL_500} !important;
+        border-color: var(--text) !important;
         background-color: var(--border) !important;
+        color: var(--text) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+    }}
+    .inline-download-btn > button:active {{
+    transform: translateY(0px) !important;
     }}
 
     .legend-box {{
@@ -308,10 +309,9 @@ st.markdown(f"""
     }}
     
     /* ============================================================
-       UNIFIED TAB STYLING - Clean, consistent, dark mode ready
+       UNIFIED TAB STYLING
        ============================================================ */
     
-    /* Tab container - the bar that holds all tabs */
     div[data-baseweb="tab-list"] {{
         background-color: var(--bg-soft) !important;
         border-radius: 12px !important;
@@ -321,7 +321,6 @@ st.markdown(f"""
         margin-bottom: 8px !important;
     }}
     
-    /* Individual tab buttons */
     button[data-baseweb="tab"] {{
         background-color: transparent !important;
         color: var(--subtext) !important;
@@ -336,7 +335,6 @@ st.markdown(f"""
         min-height: 40px !important;
     }}
     
-    /* Hover state */
     button[data-baseweb="tab"]:hover {{
         background-color: var(--border) !important;
         color: var(--text) !important;
@@ -344,7 +342,6 @@ st.markdown(f"""
         transform: translateY(-1px) !important;
     }}
     
-    /* Selected/Active tab */
     button[data-baseweb="tab"][aria-selected="true"] {{
         background-color: var(--metric-bg) !important;
         color: var(--metric-value) !important;
@@ -352,9 +349,6 @@ st.markdown(f"""
         box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
     }}
     
-    /* Tab text inside button — target every descendant level (p, span, div),
-       since BaseWeb sometimes wraps the label in a nested span with its own
-       color that a `p`-only selector won't reach. */
     button[data-baseweb="tab"] p,
     button[data-baseweb="tab"] span,
     button[data-baseweb="tab"] div {{
@@ -365,11 +359,70 @@ st.markdown(f"""
         font-family: 'IBM Plex Mono', monospace !important;
     }}
 
-    /* Selected tab text */
     button[data-baseweb="tab"][aria-selected="true"] p,
     button[data-baseweb="tab"][aria-selected="true"] span,
     button[data-baseweb="tab"][aria-selected="true"] div {{
         color: var(--metric-value) !important;
+    }}
+    
+    /* ============================================================
+       BUTTON AND EXPANDER VISIBILITY FIXES
+       ============================================================ */
+
+    /* Primary action buttons - Run/Rerun reconciliation */
+    div[data-testid="stButton"] button {{
+        background-color: var(--metric-bg) !important;
+        color: var(--metric-value) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 12px !important;
+        padding: 0.5rem 1.5rem !important;
+        font-weight: 600 !important;
+        font-family: 'IBM Plex Mono', monospace !important;
+        transition: all 0.3s ease !important;
+    }}
+
+    div[data-testid="stButton"] button:hover {{
+        background-color: var(--border) !important;
+        color: var(--text) !important;
+        border-color: var(--text) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    }}
+
+    div[data-testid="stButton"] button:active {{
+        transform: translateY(0px) !important;
+    }}
+
+    /* Expander headers - Inspect & Configure, Raw Data Preview, etc. */
+    div[data-testid="stExpander"] summary {{
+        background-color: var(--metric-bg) !important;
+        color: var(--metric-value) !important;
+        border-radius: 18px !important;
+        padding: 12px 16px !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        transition: all 0.3s ease !important;
+        cursor: pointer !important;
+    }}
+
+    div[data-testid="stExpander"] summary:hover {{
+        background-color: var(--border) !important;
+        color: var(--text) !important;
+    }}
+
+    div[data-testid="stExpander"] summary p {{
+        color: inherit !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+    }}
+
+    /* Expander content area */
+    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {{
+        background-color: var(--bg-soft) !important;
+        border-radius: 0 0 18px 18px !important;
+        padding: 16px !important;
+        border: 1px solid var(--border) !important;
+        border-top: none !important;
     }}
     
     /* ============================================================
@@ -407,9 +460,30 @@ st.markdown(f"""
         button[data-baseweb="tab"][aria-selected="true"] div {{
             color: {DARK_TEXT} !important;
         }}
+        
+        div[data-testid="stButton"] button {{
+            background-color: var(--metric-bg) !important;
+            color: var(--metric-value) !important;
+            border-color: var(--border) !important;
+        }}
+        
+        div[data-testid="stButton"] button:hover {{
+            background-color: var(--border) !important;
+            color: var(--text) !important;
+        }}
+        
+        div[data-testid="stExpander"] summary {{
+            background-color: var(--metric-bg) !important;
+            color: var(--metric-value) !important;
+        }}
+        
+        div[data-testid="stExpander"] summary:hover {{
+            background-color: var(--border) !important;
+            color: var(--text) !important;
+        }}
     }}
 
-    /* Explicit dark theme support */
+    /* Explicit dark theme support for config.toml [data-theme="dark"] */
     [data-theme="dark"] div[data-baseweb="tab-list"] {{
         background-color: var(--bg-soft) !important;
         border-color: var(--border) !important;
@@ -439,6 +513,83 @@ st.markdown(f"""
     [data-theme="dark"] button[data-baseweb="tab"][aria-selected="true"] span,
     [data-theme="dark"] button[data-baseweb="tab"][aria-selected="true"] div {{
         color: {DARK_TEXT} !important;
+    }}
+    
+    [data-theme="dark"] div[data-testid="stButton"] button {{
+        background-color: var(--metric-bg) !important;
+        color: var(--metric-value) !important;
+        border-color: var(--border) !important;
+    }}
+
+    [data-theme="dark"] div[data-testid="stButton"] button:hover {{
+        background-color: var(--border) !important;
+        color: var(--text) !important;
+    }}
+
+    [data-theme="dark"] div[data-testid="stExpander"] summary {{
+        background-color: var(--metric-bg) !important;
+        color: var(--metric-value) !important;
+    }}
+
+    [data-theme="dark"] div[data-testid="stExpander"] summary:hover {{
+        background-color: var(--border) !important;
+        color: var(--text) !important;
+    }}
+
+    div[data-testid="stFileUploader"] button {{
+    background-color: var(--metric-bg) !important;
+    color: var(--metric-value) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    padding: 0.4rem 1rem !important;
+    font-weight: 600 !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    transition: all 0.3s ease !important;
+    min-height: 38px !important;
+    }}
+
+    div[data-testid="stFileUploader"] button:hover {{
+    background-color: var(--border) !important;
+    color: var(--text) !important;
+    border-color: var(--text) !important;
+    }}
+
+    div[data-testid="stFileUploader"] button:active {{
+    transform: scale(0.98) !important;
+    }}
+
+    /* Export CSV download buttons (inline toolbar buttons) */
+    div[data-testid="stDownloadButton"] button {{
+    background-color: var(--metric-bg) !important;
+    color: var(--metric-value) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    padding: 0.4rem 1rem !important;
+    font-weight: 600 !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    transition: all 0.3s ease !important;
+    min-height: 38px !important;
+    }}
+
+    div[data-testid="stDownloadButton"] button:hover {{
+    background-color: var(--border) !important;
+    color: var(--text) !important;
+    border-color: var(--text) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+    }}
+
+    div[data-testid="stDownloadButton"] button:active {{
+    transform: translateY(0px) !important;
+    }}
+
+    /* Dark mode overrides for file uploader and download buttons */
+    @media (prefers-color-scheme: dark) {{
+    div[data-testid="stFileUploader"] button {{
+        background-color: var(--metric-bg) !important;
+        color: var(--metric-value) !important;
+        border-color: var(--border) !important;
+    }}
     }}
 </style>
 """, unsafe_allow_html=True)
