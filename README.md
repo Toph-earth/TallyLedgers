@@ -15,6 +15,7 @@ An agent that reconciles payment gateway transactions against bank settlement re
 - [The Problem](#the-problem)
 - [Results](#results)
 - [Approach](#approach)
+- [Architecture](#architecture)
 - [Configurable Thresholds](#configurable-thresholds)
 - [Exception Handling](#exception-handling)
 - [Application Features](#application-features)
@@ -65,6 +66,10 @@ The engine runs a **tiered deterministic-first matcher**, falling back to semant
 
 ---
 
+## Architecture
+<img width="1632" height="2170" alt="Architecture" src="https://github.com/user-attachments/assets/3230b636-28f4-4f94-8d09-349c33b0503a" />
+
+---
 ## Configurable Thresholds
 
 These are exposed live in the UI, not buried in code, so the matching behavior is inspectable and defensible:
