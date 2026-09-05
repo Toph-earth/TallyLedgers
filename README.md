@@ -178,7 +178,7 @@ Either:
 ## Contact
 
 - **Project Link:** [https://github.com/Toph-earth/TallyLedgers](https://github.com/Toph-earth/TallyLedgers)
-- **Live app:** [https://tallyledgers.streamlit.app]TallyLedgers
+- **Live app:** [https://tallyledgers.streamlit.app](TallyLedgers)
 
 ---
 
